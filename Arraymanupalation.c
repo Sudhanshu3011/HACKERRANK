@@ -25,34 +25,71 @@ int parse_int(char*);
  *  2. 2D_INTEGER_ARRAY queries
  */
 
-long arrayManipulation(int n, int queries_rows, int queries_columns, int** queries) {
+// long arrayManipulation(int n, int queries_rows, int queries_columns, int** queries) {
 
-       int arr[n];
-        for (int i = 0; i < n; i++) 
-        {
-        arr[i] = 0;
-        }
-        for (int i=0;i<queries_rows;i++)
-        {
-             int l =*(*(queries+i)+0);
-             int  h =*(*(queries+i)+1);
-             int   summand=*(*(queries+i)+2);
+    //  Approach 1 
+    //    int arr[n];
+    //     for (int i = 0; i < n; i++) 
+    //     {
+    //     arr[i] = 0;
+    //     }
+    //     for (int i=0;i<queries_rows;i++)
+    //     {
+    //          int l =*(*(queries+i)+0);
+    //          int  h =*(*(queries+i)+1);
+    //          int   summand=*(*(queries+i)+2);
             
-            for (int k = l - 1; k < h; k++) {
-            arr[k] += summand;}
-        }
+    //         for (int k = l - 1; k < h; k++) {
+    //         arr[k] += summand;}
+    //     }
               
         
-        long max=arr[0];
-        for(int i=0;i<n;i++)
-        {
-            if(max<arr[i])
-            {
-                max=arr[i];
-            }
+    //     long max=arr[0];
+    //     for(int i=0;i<n;i++)
+    //     {
+    //         if(max<arr[i])
+    //         {
+    //             max=arr[i];
+    //         }
+    //     }
+    //     return max;
+    long arrayManipulation(int n, int queries_rows, int queries_columns, int** queries) {
+    long arr[n + 1]; // Increase array size by 1 to handle 1-indexed queries
+
+    // Initialize array with zeros
+    for (int i = 0; i <= n; i++) {
+        arr[i] = 0;
+    }
+
+    // Iterate through queries and update prefix sums
+    for (int i = 0; i < queries_rows; i++) {
+        int l = *(*(queries + i) + 0);
+        int h = *(*(queries + i) + 1);
+        int summand = *(*(queries + i) + 2);
+
+        // Update the starting index
+        arr[l] += summand;
+
+        // If the ending index is within the array bounds, update it
+        if (h + 1 <= n) {
+            arr[h + 1] -= summand;
         }
-        return max;
+    }
+
+    // Find the maximum value using prefix sums
+    long max = arr[1];
+    long current = arr[1];
+    for (int i = 2; i <= n; i++) {
+        current += arr[i];
+        if (max < current) {
+            max = current;
+        }
+    }
+
+    return max;
 }
+
+
 
 int main()
 {
