@@ -17,44 +17,46 @@ char **split_string(char *);
 int parse_int(char *);
 
 /*
- * Complete the 'simpleArraySum' function below.
+ * Complete the 'plusMinus' function below.
  *
- * The function is expected to return an INTEGER.
- * The function accepts INTEGER_ARRAY ar as parameter.
+ * The function accepts INTEGER_ARRAY arr as parameter.
  */
 
-int simpleArraySum(int ar_count, int *ar)
+void plusMinus(int arr_count, int *arr)
 {
-    int sum = 0;
-    for (int i = 0; i < ar_count; i++)
+
+    float positive = 0, negative = 0, zero = 0;
+    for (int i = 0; i < arr_count; i++)
     {
-        sum += *(ar + i);
+        if (*(arr + i) > 0)
+            positive++;
+        else if (*(arr + i) < 0)
+            negative++;
+        else
+            zero++;
     }
-    return sum;
+
+    printf("%.6f\n", (positive / arr_count));
+    printf("%.6f\n", (negative / arr_count));
+    printf("%.6f\n", (zero / arr_count));
 }
 
 int main()
 {
-    FILE *fptr = fopen(getenv("OUTPUT_PATH"), "w");
+    int n = parse_int(ltrim(rtrim(readline())));
 
-    int ar_count = parse_int(ltrim(rtrim(readline())));
+    char **arr_temp = split_string(rtrim(readline()));
 
-    char **ar_temp = split_string(rtrim(readline()));
+    int *arr = malloc(n * sizeof(int));
 
-    int *ar = malloc(ar_count * sizeof(int));
-
-    for (int i = 0; i < ar_count; i++)
+    for (int i = 0; i < n; i++)
     {
-        int ar_item = parse_int(*(ar_temp + i));
+        int arr_item = parse_int(*(arr_temp + i));
 
-        *(ar + i) = ar_item;
+        *(arr + i) = arr_item;
     }
 
-    int result = simpleArraySum(ar_count, ar);
-
-    fprintf(fptr, "%d\n", result);
-
-    fclose(fptr);
+    plusMinus(n, arr);
 
     return 0;
 }
